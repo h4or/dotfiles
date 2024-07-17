@@ -1,0 +1,26 @@
+#!/bin/bash
+
+SAVE_FILE="$HOME/.local/scripts/display_switch_config.txt"
+NOTIFICATION_TITLE="Display Configuration Changed"
+
+show_notification() {
+    local message="$1"
+    dunstify -i display -t 3000 -u low "$NOTIFICATION_TITLE" "$message"
+}
+
+if [ ! -f "$SAVE_FILE" ]; then
+    echo "0" > "$SAVE_FILE"
+fi
+
+CURRENT_STATE=$(cat "$SAVE_FILE")
+
+if [ "$CURRENT_STATE" -eq "1" ]; then
+    xrandr --output HDMI-1 --mode 1920x1080 --rate 75 --output DVI-D-1 --mode 1920x1080 --rate 60 --right-of HDMI-1 &
+    show_notification "Switched to dual monitor setup."
+    echo "0" > "$SAVE_FILE"
+else
+    xrandr --output HDMI-1 --off --output DVI-D-1 --mode 1920x1080 --rate 60 &
+    show_notification "Switched to single monitor setup."
+    echo "1" > "$SAVE_FILE"
+fi
+
