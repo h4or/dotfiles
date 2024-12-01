@@ -1,8 +1,10 @@
 #!/bin/sh
 
-xrdb merge ~/.Xresources
-feh --bg-fill ~/.config/h4orwm/pictures/forestbg.jpg &
+xrdb merge ~/.Xresources &
+feh --bg-fill ~/.config/h4orwm/pictures/night-road.jpg &
 xset r rate 200 50 &
+xset m 5000 1 &
+xset dpms 600 900 1200 &
 picom &
 dunst &
 slstatus &
