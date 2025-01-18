@@ -32,7 +32,7 @@ fi
 # Install essential packages
 echo "Installing essential packages..."
 sudo pacman -S --needed --noconfirm \
-    libxinerama libfontconfig libx11 libxft \
+    libxinerama ibx11 libxft \
     ttf-dejavu ttf-liberation xorg-fonts-75dpi xorg-fonts-100dpi \
     kitty pavucontrol xclip maim thunar feh picom dunst
 
