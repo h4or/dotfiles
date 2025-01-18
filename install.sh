@@ -20,23 +20,10 @@ if [ -f "$CHECK_FILE" ]; then
     exit 0
 fi
 
-# 2. Update system and install prerequisites
-echo "Updating system and installing prerequisites..."
-sudo pacman -Syu --noconfirm
-if ! grep -q "\[multilib\]" /etc/pacman.conf; then
-    echo "Enabling multilib repository..."
-    sudo sed -i '/#\[multilib\]/,+1s/^#//' /etc/pacman.conf
-    sudo pacman -Syu --noconfirm
-fi
+# 2. Update system and install prerequisites using yay (AUR & official)
+echo "Updating system and installing dependencies with yay..."
 
-# Install essential packages
-echo "Installing essential packages..."
-sudo pacman -S --needed --noconfirm \
-    libxinerama ibx11 libxft \
-    ttf-dejavu ttf-liberation xorg-fonts-75dpi xorg-fonts-100dpi \
-    kitty pavucontrol xclip maim thunar feh picom dunst
-
-# 3. Install yay (only if not installed)
+# Ensure yay is installed
 if ! command -v yay &> /dev/null; then
     echo "Installing yay..."
     sudo pacman -S --needed --noconfirm base-devel git
@@ -47,18 +34,27 @@ if ! command -v yay &> /dev/null; then
     rm -rf yay
 fi
 
-# 4. Backup existing dotfiles (only if not already backed up)
-echo "Creating backup of existing dotfiles..."
-mkdir -p "$BACKUP_DIR"
+# Install all required dependencies using yay
+yay -S --needed --noconfirm \
+    libxinerama \
+    libfontconfig \
+    libx11 \
+    libxft \
+    ttf-dejavu \
+    ttf-liberation \
+    xorg-fonts-75dpi \
+    xorg-fonts-100dpi \
+    kitty \
+    pavucontrol \
+    xclip \
+    maim \
+    thunar \
+    feh \
+    picom \
+    dunst \
+    libx11
 
-backup_and_remove() {
-    if [ -e "$1" ]; then
-        echo "Backing up $1 to $BACKUP_DIR"
-        mv "$1" "$BACKUP_DIR"
-    fi
-}
-
-# 5. Setup configuration files
+# 3. Setup configuration files
 echo "Setting up configuration files..."
 mkdir -p "$CONFIG_DIR"
 cp -r "$DOTFILES_DIR/config/"* "$HOME/.config/"
@@ -81,11 +77,18 @@ git clone https://github.com/h4or/nvim-config.git "$NVIM_DIR"
 echo "Extracting home folder contents to $HOME..."
 cp -r "$DOTFILES_DIR/home/." "$HOME/"
 
-# 6. Install Zsh and Oh My Zsh (only if not installed)
+# 4. Install Zsh and Oh My Zsh (only if not installed)
 if ! command -v zsh &> /dev/null; then
     echo "Installing Zsh..."
-    sudo pacman -S --noconfirm zsh
+    yay -S --noconfirm zsh
 fi
+
+backup_and_remove() {
+    if [ -e "$1" ]; then
+        echo "Backing up $1 to $BACKUP_DIR"
+        mv "$1" "$BACKUP_DIR"
+    fi
+}
 
 backup_and_remove "$HOME/.bashrc"
 backup_and_remove "$HOME/.bash_profile"
@@ -102,7 +105,7 @@ fi
 echo "Replacing Oh My Zsh default .zshrc with custom version..."
 cp "$DOTFILES_DIR/home/.zshrc" "$HOME/.zshrc"
 
-# 7. Build and install dwm, dmenu, and slstatus (check if already installed)
+# 5. Build and install dwm, dmenu, and slstatus (check if already installed)
 echo "Building and installing dwm, dmenu, and slstatus..."
 for folder in dwm dmenu slstatus; do
     echo "Installing $folder..."
