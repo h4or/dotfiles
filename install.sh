@@ -21,12 +21,19 @@ if ! grep -q "\[multilib\]" /etc/pacman.conf; then
     sudo sed -i '/#\[multilib\]/,+1s/^#//' /etc/pacman.conf
     sudo pacman -Syu --noconfirm
 fi
+
+# 2. Install yay
 if ! command -v yay &> /dev/null; then
     echo "Installing yay..."
-    sudo pacman -S --noconfirm yay
+    sudo pacman -S --needed --noconfirm base-devel git
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si --noconfirm
+    cd ..
+    rm -rf yay
 fi
 
-# 2. Backup existing dotfiles
+# 3. Backup existing dotfiles
 echo "Creating backup of existing dotfiles..."
 mkdir -p "$BACKUP_DIR"
 
@@ -37,7 +44,7 @@ backup_and_remove() {
     fi
 }
 
-# 3. Setup configuration files
+# 4. Setup configuration files
 echo "Setting up configuration files..."
 mkdir -p "$CONFIG_DIR"
 cp -r "$DOTFILES_DIR/config/"* "$HOME/.config/"
@@ -51,7 +58,7 @@ cp -r "$DOTFILES_DIR/slstatus" "$CONFIG_DIR/"
 echo "Extracting home folder contents to $HOME..."
 cp -r "$DOTFILES_DIR/home/." "$HOME/"
 
-# 4. Install Zsh and Oh My Zsh
+# 5. Install Zsh and Oh My Zsh
 echo "Installing Zsh and Oh My Zsh..."
 sudo pacman -S --noconfirm zsh
 backup_and_remove "$HOME/.bashrc"
@@ -65,7 +72,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 echo "Replacing Oh My Zsh default .zshrc with custom version..."
 cp "$DOTFILES_DIR/home/.zshrc" "$HOME/.zshrc"
 
-# 5. Build and install dwm, dmenu, and slstatus
+# 6. Build and install dwm, dmenu, and slstatus
 echo "Building and installing dwm, dmenu, and slstatus..."
 for folder in dwm dmenu slstatus; do
     echo "Installing $folder..."
@@ -73,3 +80,4 @@ for folder in dwm dmenu slstatus; do
 done
 
 echo "Dotfiles setup completed successfully!"
+
