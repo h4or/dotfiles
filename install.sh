@@ -52,7 +52,12 @@ yay -S --needed --noconfirm \
     feh \
     picom \
     dunst \
-    libx11
+    libx11 \
+	htop \
+	google-chrome \
+	noto-fonts \
+	noto-fonts-emoji \
+	adapta-gtk-theme
 
 # 3. Setup configuration files
 echo "Setting up configuration files..."
