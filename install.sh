@@ -73,4 +73,3 @@ for folder in dwm dmenu slstatus; do
 done
 
 echo "Dotfiles setup completed successfully!"
-
