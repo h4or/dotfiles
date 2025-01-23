@@ -57,7 +57,8 @@ yay -S --needed --noconfirm \
 	google-chrome \
 	noto-fonts \
 	noto-fonts-emoji \
-	adapta-gtk-theme
+	adapta-gtk-theme \
+	lxappearance
 
 # 3. Setup configuration files
 echo "Setting up configuration files..."

@@ -73,8 +73,8 @@ static const char *upvol[]   = { "/bin/bash", "-c", "/usr/bin/pactl set-sink-vol
 static const char *downvol[] = { "/bin/bash", "-c", "/usr/bin/pactl set-sink-volume 0 -5% && /home/h4or/.config/h4orwm/dwm/scripts/update-volume-status.sh", NULL };
 static const char *mutevol[] = { "/bin/bash", "-c", "/usr/bin/pactl set-sink-mute 0 toggle && /home/h4or/.config/h4orwm/dwm/scripts/update-volume-status.sh", NULL };
 
-static const char *incr_brightnesscmd[] = { "/home/h4or/.config/h4orwm/dwm/scripts/increase_brightness.sh", NULL};
-static const char *decr_brightnesscmd[] = { "/home/h4or/.config/h4orwm/dwm/scripts/decrease_brightness.sh", NULL};
+static const char *incr_brightnesscmd[] = { "/home/h4or/.config/h4orwm/dwm/scripts/brightness.sh", "increase", NULL};
+static const char *decr_brightnesscmd[] = { "/home/h4or/.config/h4orwm/dwm/scripts/brightness.sh", "decrease", NULL};
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -94,13 +94,14 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_a,       spawn,          SHCMD("pavucontrol")},
 	{ MODKEY,                       XK_e,       spawn,          SHCMD("thunar")},
 	{ MODKEY|ControlMask,           XK_p,       spawn,          SHCMD("systemctl suspend")},
+	{ MODKEY|ControlMask|ShiftMask, XK_m,       spawn,          SHCMD("msc")},
 	{ MODKEY,                       XK_p,       spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,  spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_s,       spawn,          {.v = browsercmd } },
 
     // brigthness control
-    { MODKEY,                       XK_F11,    spawn,          {.v = incr_brightnesscmd } },
-	{ MODKEY,                       XK_F12,    spawn,          {.v = decr_brightnesscmd } },
+    { MODKEY,                       XK_F12,    spawn,          {.v = incr_brightnesscmd } },
+	{ MODKEY,                       XK_F11,    spawn,          {.v = decr_brightnesscmd } },
 
 	// layout management
 	{ MODKEY,                       XK_b,       togglebar,      {0} },

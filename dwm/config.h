@@ -94,6 +94,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_a,       spawn,          SHCMD("pavucontrol")},
 	{ MODKEY,                       XK_e,       spawn,          SHCMD("thunar")},
 	{ MODKEY|ControlMask,           XK_p,       spawn,          SHCMD("systemctl suspend")},
+	{ MODKEY|ControlMask|ShiftMask, XK_m,       spawn,          SHCMD("msc")},
 	{ MODKEY,                       XK_p,       spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,  spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_s,       spawn,          {.v = browsercmd } },
